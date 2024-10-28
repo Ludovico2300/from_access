@@ -3,6 +3,7 @@ require("dotenv").config(); // Carica le variabili d'ambiente dal file .env
 const express = require("express");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/userRoutes");
+const postRoutes = require("./routes/postRoutes");
 const db = require("./database/db");
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 // Rotte
 app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
 
 // Chiudi la connessione quando il server viene fermato
 process.on("SIGINT", async () => {

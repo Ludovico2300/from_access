@@ -17,7 +17,7 @@ async function getUserById(req, res) {
   try {
     const connection = await db.connect();
     const result = await connection.query(
-      `SELECT * FROM users WHERE ID_users = ${userId}`
+      `SELECT * FROM users WHERE ID_user = ${userId}`
     ); // Inserisci direttamente userId
     if (result.length === 0) {
       return res.status(404).send("Utente non trovato.");
@@ -52,7 +52,7 @@ async function updateUser(req, res) {
   try {
     const connection = await db.connect();
     await connection.query(
-      `UPDATE users SET nome = '${nome}', cognome = '${cognome}' WHERE ID_users = ${userId}`
+      `UPDATE users SET nome = '${nome}', cognome = '${cognome}' WHERE ID_user = ${userId}`
     ); // Inserisci direttamente i valori
     res.send("Utente aggiornato con successo.");
   } catch (err) {
@@ -65,7 +65,10 @@ async function deleteUser(req, res) {
   const userId = req.params.id;
   try {
     const connection = await db.connect();
-    await connection.query(`DELETE FROM users WHERE ID_users = ${userId}`); // Inserisci direttamente userId
+    // Prima elimina i post dell'utente
+    await connection.query(`DELETE FROM posts WHERE ID_user = ${userId}`); // Inserisci direttamente userId
+    // Poi elimina l'utente
+    await connection.query(`DELETE FROM users WHERE ID_user = ${userId}`); // Inserisci direttamente userId
     res.send("Utente eliminato con successo.");
   } catch (err) {
     console.error("Errore nella query:", err);
